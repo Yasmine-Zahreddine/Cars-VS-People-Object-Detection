@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+venv/
+env/
+
+# Virtual environment
+*.egg-info/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# PyCharm / VSCode
+.vscode/
+.idea/
+
+# models/best.pt
+
+# Docker
+*.dockerignore
