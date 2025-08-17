@@ -1,96 +1,460 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car vs People Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(120deg, #e2eafc 0%, #ffffff 100%);
-            min-height: 100vh;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin: 30px 0 40px;
+            position: relative;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+        }
+        
         h1 {
-            color: #2d3e50;
-            margin-top: 40px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2.8rem;
+            background: linear-gradient(to right, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
-            font-size: 2.2em;
             letter-spacing: 1px;
         }
-        .upload-box {
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 16px;
-            box-shadow: 0 6px 24px rgba(74,144,226,0.08);
-            margin: 30px 0;
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        
+        .upload-section {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+        
+        .result-section {
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-color: rgba(96, 165, 250, 0.4);
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: #60a5fa;
+            font-size: 1.6rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed #4b5563;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.4);
+            margin-bottom: 25px;
+        }
+        
+        .upload-area:hover {
+            border-color: #60a5fa;
+            background: rgba(15, 23, 42, 0.6);
+        }
+        
+        .upload-icon {
+            font-size: 3.5rem;
+            color: #60a5fa;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+        
+        .upload-hint {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            width: 100%;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .result-box {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            text-align: center;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
         }
-        input[type="file"] {
-            margin-bottom: 18px;
-            font-size: 1em;
+        
+        .result-placeholder {
+            color: #64748b;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 40px 20px;
         }
-        input[type="submit"] {
-            padding: 12px 32px;
-            background: linear-gradient(90deg, #4a90e2 0%, #357ab7 100%);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
+        
+        .result-placeholder i {
+            font-size: 3rem;
+            color: #4b5563;
+            margin-bottom: 20px;
         }
-        input[type="submit"]:hover {
-            background: linear-gradient(90deg, #357ab7 0%, #4a90e2 100%);
-        }
-        .result-box {
-            background: #f4f8fb;
+        
+        .result-image {
+            max-width: 100%;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(74,144,226,0.07);
-            padding: 24px;
-            margin-top: 20px;
-            display: inline-block;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(96, 165, 250, 0.3);
         }
-        .result-box h2 {
-            color: #357ab7;
-            margin-bottom: 16px;
+        
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
         }
-        img {
-            border-radius: 10px;
-            max-width: 400px;
+        
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(71, 85, 105, 0.5);
             width: 100%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.09);
-            margin-top: 10px;
         }
-        @media (max-width: 600px) {
-            .upload-box, .result-box {
-                padding: 16px;
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            width: 200px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-8px);
+            background: rgba(30, 41, 59, 0.9);
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            color: #60a5fa;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+        }
+        
+        .feature p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
             }
-            img {
-                max-width: 95vw;
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6);
+            }
+            70% {
+                box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
             }
         }
     </style>
 </head>
 <body>
-    <h1>Car vs People Detection</h1>
-    <div class="upload-box">
-        <form action="/" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" required>
-            <br>
-            <input type="submit" value="Upload & Detect">
-        </form>
-    </div>
-
-    {% if filename %}
-        <div class="result-box">
-            <h2>Detection Result</h2>
-            <img src="{{ url_for('static', filename='outputs/' + filename) }}" alt="Detection Output">
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h1>Car VS Person Detector</h1>
+            </div>
+            <p class="subtitle">Computer vision system to detect cars and people in images with high accuracy</p>
+        </header>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-bolt"></i>
+                <h3>Fast Processing</h3>
+                <p>Real-time detection powered by AI</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-tachometer-alt"></i>
+                <h3>High Accuracy</h3>
+                <p>Precision detection algorithms</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Easy Upload</h3>
+                <p>Drag & drop or click to upload</p>
+            </div>
         </div>
-    {% endif %}
+        
+        <div class="main-content">
+            <div class="upload-section">
+                <div class="card">
+                    <h2 class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload Image</h2>
+                    <form action="/" method="post" enctype="multipart/form-data">
+                        <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click();">
+                            <i class="fas fa-file-upload upload-icon"></i>
+                            <p class="upload-text">Drag & drop your image here</p>
+                            <p class="upload-hint">or click to browse files (JPG, PNG)</p>
+                            <input type="file" class="file-input" id="fileInput" name="file" accept="image/*" required>
+                        </div>
+                        <button class="btn pulse" type="submit">
+                            <i class="fas fa-search"></i> Detect Objects
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="result-section">
+                <div class="card">
+                    <h2 class="section-title"><i class="fas fa-chart-bar"></i> Detection Results</h2>
+                    <div class="result-box">
+                        {% if filename %}
+                            <img src="{{ url_for('static', filename='outputs/' ~ filename) }}" alt="Detection Output" class="result-image">
+                        {% else %}
+                            <div class="result-placeholder">
+                                <i class="fas fa-image"></i>
+                                <p>Upload an image to see detection results</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Car VS Person Detector &copy; 2025 | Computer Vision System</p>
+        </footer>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+
+            // Click on drop zone to trigger file input
+            dropZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropZone.style.borderColor = '#60a5fa';
+                dropZone.style.backgroundColor = 'rgba(15, 23, 42, 0.7)';
+            }
+
+            function unhighlight() {
+                dropZone.style.borderColor = '#4b5563';
+                dropZone.style.backgroundColor = 'rgba(15, 23, 42, 0.4)';
+            }
+
+            // Handle dropped files
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+
+            // Handle file selection
+            fileInput.addEventListener('change', function() {
+                handleFiles(this.files);
+            });
+
+            function handleFiles(files) {
+                if (files.length) {
+                    const file = files[0];
+                    if (file.type.match('image.*')) {
+                        // Just update the text, don't remove the file input!
+                        dropZone.querySelector('.upload-text').textContent = file.name;
+                        dropZone.querySelector('.upload-hint').textContent = "Ready for detection";
+                        dropZone.querySelector('.upload-icon').className = "fas fa-check-circle upload-icon";
+                        dropZone.querySelector('.upload-icon').style.color = "#4ade80";
+                    } else {
+                        alert('Please select an image file (JPG, PNG)');
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
