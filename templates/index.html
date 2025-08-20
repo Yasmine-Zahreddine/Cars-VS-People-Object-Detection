@@ -444,11 +444,14 @@
                 if (files.length) {
                     const file = files[0];
                     if (file.type.match('image.*')) {
-                        // Just update the text, don't remove the file input!
                         dropZone.querySelector('.upload-text').textContent = file.name;
                         dropZone.querySelector('.upload-hint').textContent = "Ready for detection";
                         dropZone.querySelector('.upload-icon').className = "fas fa-check-circle upload-icon";
                         dropZone.querySelector('.upload-icon').style.color = "#4ade80";
+                        // Set file to input for form submission
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        fileInput.files = dataTransfer.files;
                     } else {
                         alert('Please select an image file (JPG, PNG)');
                     }
