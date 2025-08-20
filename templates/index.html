@@ -317,6 +317,45 @@
                 box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
             }
         }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close:hover {
+            color: #60a5fa;
+        }
     </style>
 </head>
 <body>
@@ -372,7 +411,7 @@
                     <h2 class="section-title"><i class="fas fa-chart-bar"></i> Detection Results</h2>
                     <div class="result-box">
                         {% if filename %}
-                            <img src="{{ url_for('static', filename='outputs/' ~ filename) }}" alt="Detection Output" class="result-image">
+                            <img src="{{ url_for('static', filename='outputs/' ~ filename) }}" alt="Detection Output" class="result-image" id="resultImage">
                         {% else %}
                             <div class="result-placeholder">
                                 <i class="fas fa-image"></i>
@@ -388,10 +427,19 @@
             <p>Car VS Person Detector &copy; 2025 | Computer Vision System</p>
         </footer>
     </div>
+    
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('fileInput');
+            const imageModal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            const closeModal = document.querySelector('.close');
 
             // Click on drop zone to trigger file input
             dropZone.addEventListener('click', () => {
@@ -444,6 +492,7 @@
                 if (files.length) {
                     const file = files[0];
                     if (file.type.match('image.*')) {
+                        // Update UI
                         dropZone.querySelector('.upload-text').textContent = file.name;
                         dropZone.querySelector('.upload-hint').textContent = "Ready for detection";
                         dropZone.querySelector('.upload-icon').className = "fas fa-check-circle upload-icon";
@@ -457,6 +506,28 @@
                     }
                 }
             }
+
+            // Modal image display
+            const resultImage = document.getElementById('resultImage');
+            if (resultImage) {
+                resultImage.addEventListener('click', function() {
+                    const imgSrc = this.src;
+                    modalImg.src = imgSrc;
+                    imageModal.style.display = "flex";
+                });
+            }
+
+            // Close modal
+            closeModal.addEventListener('click', function() {
+                imageModal.style.display = "none";
+            });
+
+            // Close modal when clicking outside of the image
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    imageModal.style.display = "none";
+                }
+            });
         });
     </script>
 </body>
