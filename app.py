@@ -11,20 +11,6 @@ model = YOLO("models/best.pt")
 OUTPUT_FOLDER = "static/outputs"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# Helper to count cars and people
-def count_objects(results):
-    cars = 0
-    people = 0
-    # Assuming YOLO class 0 = person, class 2 = car (COCO)
-    # If your model uses different class indices, adjust accordingly!
-    for r in results:
-        for box in r.boxes:
-            cls = int(box.cls[0])
-            if cls == 0:
-                people += 1
-            elif cls == 2:
-                cars += 1
-    return cars, people
 
 @app.route("/", methods=["GET", "POST"])
 def index():
